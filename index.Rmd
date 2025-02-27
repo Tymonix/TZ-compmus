@@ -1,0 +1,99 @@
+---
+title: "Computational Musicology Portfolio"
+author: "by TZ"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+```
+
+
+### AI Song Contest Data
+
+```{r}
+library(tidyverse)
+library(plotly)
+aisc2024 <- read_csv("~/Downloads/aisc2024.csv")
+g<-ggplot(aisc2024,                     # Set up the plot.
+    aes(
+      x = tempo,
+      y = arousal,
+      size = danceability,
+      label=artist
+    )
+  ) +
+  geom_point(alpha=0.9) +              # Scatter plot.
+  #geom_rug(linewidth = 0.1) + # Add 'fringes' to show data distribution.
+  #geom_text(                  # Add text labels from above.
+   # x = 121,
+   # y = 4.91,
+   # label = "Onda Corta - Sud America",
+   # size = 3,                 # Override size (not loudness here).
+    #hjust = "left",           # Align left side of label with the point.
+    #vjust = "center",         # Align vertical centre of label with the point.
+    #angle = 30                # Rotate the text label
+  #) +
+  scale_x_continuous(         # Fine-tune the x axis.
+    limits = c(60, 160),
+    breaks = c(50, 100, 150, 200), # Specify grid lines
+    minor_breaks = NULL       # Remove 'minor' grid lines.
+  ) +
+  #scale_y_continuous(         # Fine-tune the y axis in the same way.
+    #limits = c(1, 9),
+    #breaks = c(1, 5, 9),
+    #minor_breaks = NULL
+  #) +
+  scale_fill_distiller() +  # Use the popular viridis colour palette.
+  scale_size_continuous(      # Fine-tune the sizes of each point.
+    #trans = "exp",            # Use an exp transformation to emphasise loud..
+    #guide = "none"            # Remove the legend for size.
+  ) +
+  theme_light() +             # Use a simpler theme.
+  labs(                       # Make the titles nice.
+    x = "Tempo (BPM)",
+    y = "Arousal (1-9)",
+    size = "Danceability (0-1)"
+  )
+ggplotly(g)
+```
+
+*** 
+
+Cool commentary about the music
+
+
+### Introduction
+
+```{r}
+
+```
+
+*** 
+
+This will be my portfolio
+
+### Description of submitted audio clips
+
+```{r}
+
+```
+
+*** 
+
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
+
+### Analysis of the class corpus
+
+```{r}
+
+```
+
+*** 
+
+This will be my portfolio
