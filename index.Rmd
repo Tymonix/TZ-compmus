@@ -9,61 +9,54 @@ output:
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
+source("compmus.R")
 ```
 
-
-### AI Song Contest Data
+### Chroma Self-similarity Matrix 1
 
 ```{r}
-library(tidyverse)
-library(plotly)
-aisc2024 <- read_csv("~/Downloads/aisc2024.csv")
-g<-ggplot(aisc2024,                     # Set up the plot.
-    aes(
-      x = tempo,
-      y = arousal,
-      size = danceability,
-      label=artist
-    )
-  ) +
-  geom_point(alpha=0.9) +              # Scatter plot.
-  #geom_rug(linewidth = 0.1) + # Add 'fringes' to show data distribution.
-  #geom_text(                  # Add text labels from above.
-   # x = 121,
-   # y = 4.91,
-   # label = "Onda Corta - Sud America",
-   # size = 3,                 # Override size (not loudness here).
-    #hjust = "left",           # Align left side of label with the point.
-    #vjust = "center",         # Align vertical centre of label with the point.
-    #angle = 30                # Rotate the text label
-  #) +
-  scale_x_continuous(         # Fine-tune the x axis.
-    limits = c(60, 160),
-    breaks = c(50, 100, 150, 200), # Specify grid lines
-    minor_breaks = NULL       # Remove 'minor' grid lines.
-  ) +
-  #scale_y_continuous(         # Fine-tune the y axis in the same way.
-    #limits = c(1, 9),
-    #breaks = c(1, 5, 9),
-    #minor_breaks = NULL
-  #) +
-  scale_fill_distiller() +  # Use the popular viridis colour palette.
-  scale_size_continuous(      # Fine-tune the sizes of each point.
-    #trans = "exp",            # Use an exp transformation to emphasise loud..
-    #guide = "none"            # Remove the legend for size.
-  ) +
-  theme_light() +             # Use a simpler theme.
-  labs(                       # Make the titles nice.
-    x = "Tempo (BPM)",
-    y = "Arousal (1-9)",
-    size = "Danceability (0-1)"
-  )
-ggplotly(g)
+"features/tymon-z-1.json" |>                           # Change the track
+  compmus_chroma(norm = "identity") |>                 # Change the norm
+  compmus_self_similarity(
+    feature = pc,
+    distance = "euclidean"                             # Change the distance
+  ) |>   
+  ggplot(aes(x = xtime, y = ytime, fill = d)) + 
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()
+
 ```
 
 *** 
 
-Cool commentary about the music
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
+
+### Chroma Self-similarity Matrix 2
+
+```{r}
+"features/tymon-z-2.json" |>                           # Change the track
+  compmus_chroma(norm = "identity") |>                 # Change the norm
+  compmus_self_similarity(
+    feature = pc,
+    distance = "euclidean"                             # Change the distance
+  ) |>   
+  ggplot(aes(x = xtime, y = ytime, fill = d)) + 
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic() 
+```
+
+*** 
+
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
+
 
 
 ### Introduction
@@ -76,9 +69,122 @@ Cool commentary about the music
 
 This will be my portfolio
 
-### Description of submitted audio clips
+
+### Cepstrogram 1
 
 ```{r}
+"features/tymon-z-1.json" |>                           # Change the track
+  compmus_mfccs(norm = "identity") |>                  # Change the norm
+  ggplot(aes(x = time, y = mfcc, fill = value)) + 
+  geom_raster() +
+  scale_y_continuous(
+    breaks = 0:12,
+    minor_breaks = NULL,
+  ) +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = "Coefficient Number", fill = NULL) +
+  theme_classic()
+  
+```
+
+*** 
+
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
+
+### Cepstrogram 2
+
+```{r}
+"features/tymon-z-2.json" |>                           # Change the track
+  compmus_mfccs(norm = "identity") |>                  # Change the norm
+  ggplot(aes(x = time, y = mfcc, fill = value)) + 
+  geom_raster() +
+  scale_y_continuous(
+    breaks = 0:12,
+    minor_breaks = NULL,
+  ) +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = "Coefficient Number", fill = NULL) +
+  theme_classic()     
+```
+
+*** 
+
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
+
+### Chromogram of piece 1
+
+```{r}
+"features/tymon-z-1.json" |>                           # Change the track
+  compmus_chroma(norm = "identity") |>                 # Change the norm
+  ggplot(aes(x = time, y = pc, fill = value)) + 
+  geom_raster() +
+  scale_y_continuous(
+    breaks = 0:11,
+    minor_breaks = NULL,
+    labels = c(
+                "C", "C#|Db", "D", "D#|Eb",
+                "E", "F", "F#|Gb", "G",
+                "G#|Ab", "A", "A#|Bb", "B"
+              )
+  ) +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()           
+```
+
+*** 
+
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
+
+### Chromogram of piece 2
+
+```{r}
+
+"features/tymon-z-2.json" |>                           # Change the track
+  compmus_chroma(norm = "identity") |>                 # Change the norm
+  ggplot(aes(x = time, y = pc, fill = value)) + 
+  geom_raster() +
+  scale_y_continuous(
+    breaks = 0:11,
+    minor_breaks = NULL,
+    labels = c(
+                "C", "C#|Db", "D", "D#|Eb",
+                "E", "F", "F#|Gb", "G",
+                "G#|Ab", "A", "A#|Bb", "B"
+              )
+  ) +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()  
+```
+
+*** 
+
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
+
+
+### Timbre Self-similarity Matrix 1
+
+```{r}
+"features/tymon-z-1.json" |>                           # Change the track
+  compmus_mfccs(norm = "identity") |>                  # Change the norm
+  compmus_self_similarity(
+    feature = mfcc,
+    distance = "euclidean"                             # Change the distance
+  ) |>   
+  ggplot(aes(x = xtime, y = ytime, fill = d)) + 
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()  
 
 ```
 
@@ -88,12 +194,24 @@ Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, vi
 
 The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
 
-### Analysis of the class corpus
+### Timbre Self-similarity Matrix 2
 
 ```{r}
-
+"features/tymon-z-2.json" |>                           # Change the track
+  compmus_mfccs(norm = "identity") |>                  # Change the norm
+  compmus_self_similarity(
+    feature = mfcc,
+    distance = "euclidean"                             # Change the distance
+  ) |>   
+  ggplot(aes(x = xtime, y = ytime, fill = d)) + 
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +               # Change the colours?
+  labs(x = "Time (s)", y = NULL, fill = NULL) +
+  theme_classic()  
 ```
 
 *** 
 
-This will be my portfolio
+Both pieces are mine. The first one is called 'Conjunction no. 3' for violin, viola, cello and contrabass clarinet. 'Conjunctions' is a series where I explore simple rhythmical structures that change over time. 
+
+The second file is an exercise for a class I have at Conservatorium called 'musical texture'. This one is an electronic piece, consisting of 4 voices on the same e-instrument of various pulsations. The 4 voices move through a harmony from my choral piece years ago and create a 'soundmass'.
